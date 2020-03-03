@@ -47,6 +47,10 @@ public class DeviceService {
                 .collect(Collectors.toList());
     }
 
+    public List<DeviceDetail> searchDevice(String name){
+        return deviceDetailRepo.findAllByDeviceNameContains(name);
+    }
+
 
     public void changeDeviceTopic(String pre, String now){
 

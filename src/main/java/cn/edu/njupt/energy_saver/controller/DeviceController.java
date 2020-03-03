@@ -1,6 +1,7 @@
 package cn.edu.njupt.energy_saver.controller;
 
 import cn.edu.njupt.energy_saver.dataobject.DeviceCategory;
+import cn.edu.njupt.energy_saver.dataobject.DeviceDetail;
 import cn.edu.njupt.energy_saver.dataobject.UserControl;
 import cn.edu.njupt.energy_saver.dataobject.projection.DeviceDetailProj;
 import cn.edu.njupt.energy_saver.service.CategoryService;
@@ -73,6 +74,13 @@ public class DeviceController {
                 });
 
         return res;
+    }
+
+    @GetMapping("/search")
+    public List<DeviceDetail> searchDevice(
+            UserControl userControl,
+            @RequestParam("key")String key){
+        return deviceService.searchDevice(key);
     }
 
 }
