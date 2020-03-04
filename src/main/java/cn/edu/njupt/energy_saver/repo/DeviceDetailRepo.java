@@ -1,6 +1,7 @@
 package cn.edu.njupt.energy_saver.repo;
 
 import cn.edu.njupt.energy_saver.dataobject.DeviceDetail;
+import cn.edu.njupt.energy_saver.dataobject.DeviceStrategy;
 import cn.edu.njupt.energy_saver.dataobject.projection.DeviceDetailProj;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,8 @@ public interface DeviceDetailRepo extends JpaRepository<DeviceDetail, Integer> {
     List<DeviceDetail> findAllByDeviceNameContains(String deviceName);
 
     List<DeviceDetail> findAllByDeviceId(String deviceId);
+
+    DeviceDetail findByDeviceIdAndDeviceTopic(String deviceId, String deviceTopic);
 
     Integer deleteByDeviceName(String deviceName);
 

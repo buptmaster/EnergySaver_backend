@@ -77,10 +77,16 @@ public class DeviceController {
     }
 
     @GetMapping("/search")
-    public List<DeviceDetail> searchDevice(
-            UserControl userControl,
-            @RequestParam("key")String key){
+    public List<DeviceDetail> searchDevice(UserControl userControl,
+                                           @RequestParam("key")String key){
         return deviceService.searchDevice(key);
+    }
+
+    @PostMapping("/category")
+    public String modifyCategory(UserControl userControl,
+                               @RequestBody List<JSONObject> j){
+        deviceService.diffDevice(j);
+        return "success";
     }
 
 }
