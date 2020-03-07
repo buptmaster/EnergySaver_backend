@@ -89,4 +89,10 @@ public class DeviceController {
         return "success";
     }
 
+    @GetMapping("/searchCg")
+    public List<String> searchCategories(UserControl userControl,
+                                         @RequestParam("key")String key){
+        return categoryService.getAllCategoriesByKey(key);
+    }
+
 }

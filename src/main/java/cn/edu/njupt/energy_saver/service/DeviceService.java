@@ -1,7 +1,9 @@
 package cn.edu.njupt.energy_saver.service;
 
+import cn.edu.njupt.energy_saver.dataobject.DeviceCategory;
 import cn.edu.njupt.energy_saver.dataobject.DeviceDetail;
 import cn.edu.njupt.energy_saver.dataobject.projection.DeviceDetailProj;
+import cn.edu.njupt.energy_saver.repo.DeviceCategoryRepo;
 import cn.edu.njupt.energy_saver.repo.DeviceDetailRepo;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -20,6 +22,9 @@ public class DeviceService {
 
     @Autowired
     DeviceDetailRepo deviceDetailRepo;
+
+    @Autowired
+    DeviceCategoryRepo deviceCategoryRepo;
 
     private void dfs(List<JSONObject> children, String path, List<String> res) {
         System.out.println(path);
@@ -86,6 +91,13 @@ public class DeviceService {
                     deviceDetailRepo.save(deviceDetail);
                 }
             });
+            DeviceCategory dc = deviceCategoryRepo.findByCategoryNameAndTag(
+                    j.getString("categoryName"),
+                    j.getString("tag")
+            );
+
+            dc.setChildren(j.getJSONArray("children").toJSONString());
+            deviceCategoryRepo.save(dc);
         });
     }
 
