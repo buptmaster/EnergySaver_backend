@@ -18,6 +18,10 @@ public class StrategyService {
 
     }
 
+    public void deleteStrategy(String name){
+        deviceStrategyRepo.deleteByStrategyName(name);
+    }
+
     public void addStrategies(List<DeviceStrategy> deviceStrategies){
         deviceStrategyRepo.save(deviceStrategies);
     }

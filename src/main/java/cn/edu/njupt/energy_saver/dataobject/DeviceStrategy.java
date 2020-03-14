@@ -20,6 +20,7 @@ public class DeviceStrategy {
     /**
      * 日期+时间的JSON
      * ["2010-10-1 20:00~2010-10-1 21:00"]
+     *  还可以兼容星期
      */
     @Column(columnDefinition = "text")
     private String time;

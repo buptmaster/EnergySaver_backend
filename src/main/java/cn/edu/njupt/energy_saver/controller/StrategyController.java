@@ -43,6 +43,12 @@ public class StrategyController {
         strategyService.addStrategies(deviceStrategies);
     }
 
+    @PostMapping("/delete")
+    public String deleteStrategy(UserControl userControl, @RequestParam("name")String name){
+        strategyService.deleteStrategy(name);
+        return "success";
+    }
+
     @PostMapping("/addPerWeek")
     public void addStrategiesPerWeek(UserControl userControl, @RequestBody JSONObject jsonObject){
 
