@@ -51,7 +51,31 @@ public class StrategyController {
 
     @PostMapping("/addPerWeek")
     public void addStrategiesPerWeek(UserControl userControl, @RequestBody JSONObject jsonObject){
+        System.out.println(jsonObject);
+        List<DeviceStrategy> deviceStrategies = new ArrayList<>();
+        String strategyName = jsonObject.getString("strategyName");
+        Integer priority = jsonObject.getInteger("priority");
 
+        JSONArray child = jsonObject.getJSONArray("child");
+        child.forEach(c -> {
+            JSONObject j = ((JSONObject) c);
+
+            DeviceStrategy d = new DeviceStrategy();
+            d.setStrategyName(strategyName);
+            d.setPriority(priority);
+            d.setDeviceGroup(j.getString("deviceGroup"));
+
+            JSONObject n = new JSONObject();
+            n.put("weekStart", j.getString("weekStart"));
+            n.put("weekEnd", j.getString("weekEnd"));
+            n.put("time", j.getJSONArray("time"));
+
+            d.setTime(n.toJSONString());
+
+            deviceStrategies.add(d);
+        });
+        System.out.println(JSONObject.toJSON(deviceStrategies));
+        strategyService.addStrategies(deviceStrategies);
     }
 
     @GetMapping("/all")
@@ -68,10 +92,16 @@ public class StrategyController {
                             .getAllStrategy(order, name)
                             .forEach(s -> {
                                 JSONObject smallj = new JSONObject();
-                                List<String> times = JSON.parseArray(s.getTime()).toJavaList(String.class);
                                 smallj.put("priority", s.getPriority());
                                 smallj.put("deviceGroup", s.getDeviceGroup());
-                                smallj.put("time", times);
+                                if(s.getTime().contains("weekStart")){
+                                    JSONObject j = JSONObject.parseObject(s.getTime());
+                                    smallj.put("week", true);
+                                    smallj.put("time", j);
+                                } else {
+                                    List<String> times = JSON.parseArray(s.getTime()).toJavaList(String.class);
+                                    smallj.put("time", times);
+                                }
                                 childs.add(smallj);
                             });
                     bigs.put("strategyName", name);
