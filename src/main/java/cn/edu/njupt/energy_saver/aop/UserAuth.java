@@ -1,0 +1,44 @@
+package cn.edu.njupt.energy_saver.aop;
+
+import cn.edu.njupt.energy_saver.dataobject.UserControl;
+import cn.edu.njupt.energy_saver.exception.CustomError;
+import cn.edu.njupt.energy_saver.exception.LocalRuntimeException;
+import cn.edu.njupt.energy_saver.service.UserService;
+import com.alibaba.fastjson.JSONObject;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+
+@Aspect
+@Component
+public class UserAuth {
+
+    @Autowired
+    UserService userService;
+
+    @Pointcut("execution(* cn.edu.njupt.energy_saver.controller.StrategyController.*(..))")
+    public void userAuth(){}
+
+    @Around("userAuth()")
+    public Object doAuth(ProceedingJoinPoint point) throws Throwable {
+        MethodSignature signature = (MethodSignature) point.getSignature();
+
+        for (Object arg : point.getArgs()) {
+            if (arg instanceof UserControl) {
+                UserControl u = ((UserControl) arg);
+                if (!u.getRole().equals("ADMIN")) {
+            throw new LocalRuntimeException(CustomError.UNAUTHORIZED);
+        }
+    }
+}
+
+
+        return point.proceed();
+    }
+
+}

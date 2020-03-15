@@ -20,6 +20,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -30,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.List;
+
 
 @SpringBootApplication
 public class EnergySaverApplication {
@@ -85,11 +87,15 @@ public class EnergySaverApplication {
                         UserControl userControl = userService.login(
                                 request.getParameter("username"),
                                 request.getParameter("password"));
-                        response.setHeader("set-cookie", COOKIE_KEY + "=" + userControl.getAuthId());
+                        Cookie c = new Cookie(COOKIE_KEY, userControl.getAuthId());
+                        c.setPath("/");
+                        c.setDomain("localhost");
+                        response.addCookie(c);
+//                        response.setHeader("set-cookie", COOKIE_KEY + "=" + userControl.getAuthId());
 //                        response.getWriter().write(JSON.toJSONString(userControl));
 
                     } else if (cookie == null) {
-//                        throw new LocalRuntimeException(CustomError.UNAUTHORIZED);
+                        throw new LocalRuntimeException(CustomError.UNAUTHORIZED);
                     } else {
                         UserControl userControl = userService.findUserByAuth(cookie.getValue());
                         if (userControl != null)

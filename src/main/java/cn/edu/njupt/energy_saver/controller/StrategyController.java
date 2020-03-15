@@ -79,7 +79,7 @@ public class StrategyController {
     }
 
     @GetMapping("/all")
-    public List<JSONObject> getAllStrategies(@RequestParam("order") String order){
+    public List<JSONObject> getAllStrategies(UserControl control, @RequestParam("order") String order){
 
         List<JSONObject> js = new ArrayList<>();
 
