@@ -1,17 +1,20 @@
 package cn.edu.njupt.energy_saver.dataobject;
 
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Table
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class DeviceRequest {
 
     @Id
+    @GeneratedValue
+    Integer id;
+
     String username;
 
     String reason;
@@ -29,6 +32,14 @@ public class DeviceRequest {
      * denied
      */
     String status;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;

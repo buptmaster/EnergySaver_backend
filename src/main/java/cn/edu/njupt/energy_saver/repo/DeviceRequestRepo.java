@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DeviceRequestRepo extends JpaRepository<DeviceRequest, String> {
+public interface DeviceRequestRepo extends JpaRepository<DeviceRequest, Integer> {
 
     List<DeviceRequest> findAllByStatus(String status);
+
+    DeviceRequest findById(Integer id);
 }
