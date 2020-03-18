@@ -1,9 +1,7 @@
 package cn.edu.njupt.energy_saver.controller;
 
-import cn.edu.njupt.energy_saver.dataobject.DeviceRequest;
 import cn.edu.njupt.energy_saver.dataobject.UserControl;
 import cn.edu.njupt.energy_saver.service.DeviceRequestService;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

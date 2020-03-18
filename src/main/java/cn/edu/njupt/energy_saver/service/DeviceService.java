@@ -5,7 +5,6 @@ import cn.edu.njupt.energy_saver.dataobject.DeviceDetail;
 import cn.edu.njupt.energy_saver.dataobject.projection.DeviceDetailProj;
 import cn.edu.njupt.energy_saver.repo.DeviceCategoryRepo;
 import cn.edu.njupt.energy_saver.repo.DeviceDetailRepo;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -19,6 +18,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class DeviceService {
+
+    @Autowired
+    MessageService messageService;
 
     @Autowired
     DeviceDetailRepo deviceDetailRepo;
@@ -109,12 +111,6 @@ public class DeviceService {
         return map;
     }
 
-    public void sendMessageToDevice(String deviceTopic, String Message) {
-    }
-
-    public void sendMessageToDevices(String deviceGroup, String Message) {
-    }
-
     public Page<DeviceDetailProj> getAllDevices(int pageNum, int pageSize) {
         return deviceDetailRepo.findAllDistinct(new PageRequest(pageNum - 1, pageSize));
     }
@@ -136,6 +132,8 @@ public class DeviceService {
         if (d == null) return;
         d.setDeviceTopic(nowTopic);
         deviceDetailRepo.save(d);
+
+        messageService.setTopicChangedMessage(nowTopic, deviceId);
     }
 
     public void removeDeviceTopics(String deviceId) {
@@ -148,14 +146,13 @@ public class DeviceService {
 
             deviceDetailRepo.deleteByDeviceId(deviceDetail.getDeviceId());
 
-            System.out.println(JSONObject.toJSON(save));
-
             deviceDetailRepo.save(save);
         }
     }
 
     public void deleteDevice(String deviceId) {
         deviceDetailRepo.deleteByDeviceId(deviceId);
+        messageService.setOrderMessage("status:allow", deviceId);
     }
 
 }

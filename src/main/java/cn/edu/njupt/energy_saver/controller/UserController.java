@@ -29,7 +29,6 @@ public class UserController {
         jsonObject.put("username", userControl.getUserName());
         jsonObject.put("status", "unauthorized");
         deviceRequestService.addRequest(jsonObject);
-        System.out.println(jsonObject);
         return "success";
     }
 }
