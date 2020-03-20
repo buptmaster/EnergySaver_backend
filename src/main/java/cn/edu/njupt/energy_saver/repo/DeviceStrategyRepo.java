@@ -18,6 +18,9 @@ public interface DeviceStrategyRepo extends JpaRepository<DeviceStrategy, String
     @Transactional
     Integer deleteByStrategyName(String strategyName);
 
+    @Transactional
+    Integer deleteByDeviceGroup(String deviceGroup);
+
     List<DeviceStrategy> findAllByPriority(int priority);
 
     @Query("select distinct s.strategyName from DeviceStrategy s")
