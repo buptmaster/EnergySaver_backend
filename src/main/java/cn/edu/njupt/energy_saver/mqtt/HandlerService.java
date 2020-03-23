@@ -1,5 +1,6 @@
 package cn.edu.njupt.energy_saver.mqtt;
 
+import cn.edu.njupt.energy_saver.config.GlobalConfig;
 import cn.edu.njupt.energy_saver.dataobject.DeviceDetail;
 import cn.edu.njupt.energy_saver.repo.DeviceDetailRepo;
 import cn.edu.njupt.energy_saver.util.IdGenerator;
@@ -16,8 +17,9 @@ public class HandlerService {
     public void handleMessage(String message, String topic) {
         if(topic.equals("subscribe")){
             addDevice(message);
-        } else {
-
+        } else if(topic.equals("alive")){
+            //设备发送其id向平台展示其正常
+            GlobalConfig.deviceStatus.put(topic, true);
         }
     }
 

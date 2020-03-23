@@ -1,8 +1,11 @@
 package cn.edu.njupt.energy_saver.task;
 
+import cn.edu.njupt.energy_saver.config.GlobalConfig;
+import cn.edu.njupt.energy_saver.dataobject.DeviceDetail;
 import cn.edu.njupt.energy_saver.dataobject.DeviceStrategy;
 import cn.edu.njupt.energy_saver.repo.DeviceDetailRepo;
 import cn.edu.njupt.energy_saver.repo.DeviceStrategyRepo;
+import cn.edu.njupt.energy_saver.service.MessageService;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @EnableScheduling
@@ -27,6 +31,9 @@ public class TimerTask {
 
     @Autowired
     DeviceStrategyRepo deviceStrategyRepo;
+
+    @Autowired
+    MessageService messageService;
 
     @Scheduled(cron = "0/2 * * * * ?")
     private void configureTask() {
@@ -44,6 +51,23 @@ public class TimerTask {
             }
 
         });
+
+        orders.forEach((key, value) -> messageService.setOrderMessageByGroup("status:" + value, key));
+    }
+
+    //时间可以设置长一点
+    @Scheduled(cron = "0/5 * * * * ?")
+    private void wipeStatus(){
+        if (GlobalConfig.deviceStatus == null) return;
+        List<String> suspectOffline = GlobalConfig.deviceStatus.entrySet().stream().filter(e -> !e.getValue()).map(Map.Entry::getKey).collect(Collectors.toList());
+        GlobalConfig.deviceStatus = deviceDetailRepo.getAllDeviceId().stream().collect(Collectors.toMap(v -> v, v -> false));
+
+        suspectOffline.forEach(s -> {
+            List<DeviceDetail> des = deviceDetailRepo.findAllByDeviceId(s);
+            des.forEach(d -> d.setStatus("offline"));
+            deviceDetailRepo.save(des);
+        });
+
     }
 
     private void byWeek(Map<String, String> orders, String time, String deviceGroup) {
@@ -69,7 +93,6 @@ public class TimerTask {
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 
         if(now.after(calendar.getTime())) {
-            orders.put(deviceGroup, "forbidden");
             return;
         }
 
@@ -89,12 +112,7 @@ public class TimerTask {
             e.printStackTrace();
         }
 
-        System.out.println(startTime);
-        System.out.println(endTime);
-
-        if (now.before(startTime) || now.after(endTime)){
-            return;
-        }else {
+        if (!now.before(startTime) && !now.after(endTime)){
             orders.put(deviceGroup, "allow");
         }
 

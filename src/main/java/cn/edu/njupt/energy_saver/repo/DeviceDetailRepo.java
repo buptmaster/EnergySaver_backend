@@ -19,6 +19,9 @@ public interface DeviceDetailRepo extends JpaRepository<DeviceDetail, Integer> {
     @Query(value = "select d from DeviceDetail d where d.deviceName like ?1% ")
     List<DeviceDetail> findDeviceGroup(String name);
 
+    @Query(value = "select distinct d.deviceId from DeviceDetail d")
+    List<String> getAllDeviceId();
+
     List<DeviceDetail> findAllByDeviceNameContains(String deviceName);
 
     List<DeviceDetail> findAllByDeviceId(String deviceId);

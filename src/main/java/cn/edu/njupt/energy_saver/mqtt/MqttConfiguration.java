@@ -55,7 +55,7 @@ public class MqttConfiguration {
 
     @Bean
     public MessageProducer inbound() {
-        adapter = new MqttPahoMessageDrivenChannelAdapter(url, clientId, inboundTopic);
+        adapter = new MqttPahoMessageDrivenChannelAdapter(url, clientId, inboundTopic, "alive");
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(1);
