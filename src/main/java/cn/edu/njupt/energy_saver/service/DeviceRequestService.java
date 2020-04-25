@@ -21,7 +21,7 @@ public class DeviceRequestService {
 
     public void changeStatus(Integer id, String status) {
         DeviceRequest deviceRequest = deviceRequestRepo.findById(id);
-        deviceRequest.setStatus("status");
+        deviceRequest.setStatus(status);
         deviceRequestRepo.save(deviceRequest);
     }
 

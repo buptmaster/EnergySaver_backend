@@ -7,6 +7,8 @@ import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -30,5 +32,20 @@ public class UserController {
         jsonObject.put("status", "unauthorized");
         deviceRequestService.addRequest(jsonObject);
         return "success";
+    }
+
+    @GetMapping("/all")
+    public List<UserControl> getAll(UserControl userControl){
+        return userService.getAllUsers();
+    }
+
+    @PostMapping("/addUser")
+    public void addUser(UserControl userControl, @RequestBody JSONObject jsonObject) {
+        userService.addUser(jsonObject);
+    }
+
+    @PostMapping("/delUser")
+    public void deleteUser(UserControl userControl, @RequestParam("username")String username) {
+        userService.deleteUser(username);
     }
 }

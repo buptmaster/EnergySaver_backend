@@ -10,4 +10,6 @@ public interface UserControlRepo extends JpaRepository<UserControl, String> {
     UserControl findByUserName(String userName);
 
     UserControl findByAuthId(String authId);
+
+    Integer deleteByUserName(String userName);
 }

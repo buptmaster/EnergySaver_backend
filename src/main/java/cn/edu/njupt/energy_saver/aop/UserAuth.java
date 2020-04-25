@@ -24,17 +24,38 @@ public class UserAuth {
     public void userAuth() {
     }
 
+    @Pointcut("execution(* cn.edu.njupt.energy_saver.controller.UserController.getAll(..))" +
+            "&& execution(* cn.edu.njupt.energy_saver.controller.UserController.deleteUser(..))" +
+            "&& execution(* cn.edu.njupt.energy_saver.controller.UserController.addUser(..))")
+    public void adminAuth(){
+    }
+
     @Around("userAuth()")
     public Object doAuth(ProceedingJoinPoint point) throws Throwable {
         for (Object arg : point.getArgs()) {
             if (arg instanceof UserControl) {
                 UserControl u = ((UserControl) arg);
-                if (!u.getRole().equals("ADMIN")) {
+                if (!u.getRole().equals("ADMIN") && !u.getRole().equals("NORMAL")) {
                     throw new LocalRuntimeException(CustomError.UNAUTHORIZED);
                 }
             }
         }
         return point.proceed();
     }
+
+    @Around("adminAuth()")
+    public Object doAdminAuth(ProceedingJoinPoint point) throws Throwable {
+        for (Object arg : point.getArgs()) {
+            if (arg instanceof UserControl) {
+                UserControl u = ((UserControl) arg);
+                if (!u.getRole().equals("ADMIN") ) {
+                    throw new LocalRuntimeException(CustomError.UNAUTHORIZED);
+                }
+            }
+        }
+        return point.proceed();
+    }
+
+
 
 }

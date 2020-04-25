@@ -4,9 +4,13 @@ import cn.edu.njupt.energy_saver.dataobject.UserControl;
 import cn.edu.njupt.energy_saver.exception.CustomError;
 import cn.edu.njupt.energy_saver.exception.LocalRuntimeException;
 import cn.edu.njupt.energy_saver.repo.UserControlRepo;
+import cn.edu.njupt.energy_saver.util.IdGenerator;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -26,5 +30,23 @@ public class UserService {
 
     public UserControl findUserByAuth(String auth){
         return userControlRepo.findByAuthId(auth);
+    }
+
+    public List<UserControl> getAllUsers(){
+        return userControlRepo.findAll();
+    }
+
+    public void addUser(JSONObject jsonObject) {
+        UserControl userControl = new UserControl();
+        userControl.setAuthId(IdGenerator.newId());
+        userControl.setUserName(jsonObject.getString("username"));
+        userControl.setPassword(jsonObject.getString("password"));
+        userControl.setRole(jsonObject.getString("role"));
+
+        userControlRepo.save(userControl);
+    }
+
+    public void deleteUser(String username) {
+        userControlRepo.deleteByUserName(username);
     }
 }
