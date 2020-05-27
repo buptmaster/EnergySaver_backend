@@ -55,7 +55,16 @@ public class MqttConfiguration {
 
     @Bean
     public MessageProducer inbound() {
-        adapter = new MqttPahoMessageDrivenChannelAdapter(url, clientId, inboundTopic, "alive");
+        adapter = new MqttPahoMessageDrivenChannelAdapter(
+                url,
+                clientId,
+                inboundTopic,
+                "alive",
+                "$SYS/broker/bytes/received",
+                "$SYS/broker/bytes/sent",
+                "$SYS/broker/clients/connected",
+                "$SYS/broker/clients/disconnected",
+                "$SYS/broker/clients/total");
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(1);
@@ -68,7 +77,6 @@ public class MqttConfiguration {
     @ServiceActivator(inputChannel = "mqttInputChannel")
     public MessageHandler handler() {
         return message -> {
-            System.out.println(JSONObject.toJSON(message));
             handlerService.handleMessage(
                     message.getPayload().toString(),
                     message.getHeaders().get("mqtt_topic").toString());

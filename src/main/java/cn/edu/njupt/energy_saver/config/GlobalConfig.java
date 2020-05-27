@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.ServletContextAware;
 
 import javax.servlet.ServletContext;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -18,7 +19,7 @@ public class GlobalConfig implements InitializingBean, ServletContextAware {
     @Autowired
     DeviceDetailRepo deviceDetailRepo;
 
-    public static Map<String, Boolean> deviceStatus;
+    public static Map<String, Boolean> deviceStatus = new HashMap<>();
 
     @Override
     public void afterPropertiesSet() throws Exception {
