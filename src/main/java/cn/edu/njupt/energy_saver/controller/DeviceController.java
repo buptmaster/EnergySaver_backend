@@ -4,6 +4,7 @@ import cn.edu.njupt.energy_saver.dataobject.DeviceCategory;
 import cn.edu.njupt.energy_saver.dataobject.DeviceDetail;
 import cn.edu.njupt.energy_saver.dataobject.UserControl;
 import cn.edu.njupt.energy_saver.dataobject.projection.DeviceDetailProj;
+import cn.edu.njupt.energy_saver.mqtt.HandlerService;
 import cn.edu.njupt.energy_saver.service.CategoryService;
 import cn.edu.njupt.energy_saver.service.DeviceService;
 import com.alibaba.fastjson.JSONObject;
@@ -28,6 +29,11 @@ public class DeviceController {
     @GetMapping("/counts")
     public Map<String, Integer> getDeviceCounts(UserControl userControl){
         return deviceService.getDeviceCount();
+    }
+
+    @GetMapping("/mqtt")
+    public Map<String, String> getMqttStatus(UserControl userControl){
+        return HandlerService.mqttStatus;
     }
 
     @GetMapping("/all")
