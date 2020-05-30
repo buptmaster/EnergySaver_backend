@@ -26,4 +26,7 @@ public interface DeviceStrategyRepo extends JpaRepository<DeviceStrategy, String
     @Query("select distinct s.strategyName from DeviceStrategy s")
     List<String> getStrategyName();
 
+    @Query("select max(d.priority) from DeviceStrategy d")
+    Integer getTopPriority();
+
 }

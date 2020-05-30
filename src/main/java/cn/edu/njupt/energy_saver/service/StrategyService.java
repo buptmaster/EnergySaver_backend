@@ -14,9 +14,6 @@ public class StrategyService {
     @Autowired
     DeviceStrategyRepo deviceStrategyRepo;
 
-    public void addStrategy(){
-
-    }
 
     public void deleteStrategy(String name){
         deviceStrategyRepo.deleteByStrategyName(name);
@@ -34,6 +31,10 @@ public class StrategyService {
 
     public List<String> getAllNames(){
         return deviceStrategyRepo.getStrategyName();
+    }
+
+    public Integer getTopPriority(){
+        return deviceStrategyRepo.getTopPriority();
     }
 
 }
