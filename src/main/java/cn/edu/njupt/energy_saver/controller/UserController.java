@@ -46,6 +46,6 @@ public class UserController {
 
     @PostMapping("/delUser")
     public void deleteUser(UserControl userControl, @RequestParam("username")String username) {
-        userService.deleteUser(username);
+        userService.deleteUser(username, userControl);
     }
 }

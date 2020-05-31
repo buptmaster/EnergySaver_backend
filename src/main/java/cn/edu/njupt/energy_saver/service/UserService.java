@@ -46,7 +46,9 @@ public class UserService {
         userControlRepo.save(userControl);
     }
 
-    public void deleteUser(String username) {
+    public void deleteUser(String username, UserControl userControl) {
+        UserControl needDeleted = userControlRepo.findByUserName(username);
+        if (userControl.getRole().equals("NORMAL")) return;
         userControlRepo.deleteByUserName(username);
     }
 }

@@ -56,7 +56,7 @@ public class TimerTask {
     }
 
     //时间可以设置长一点
-    @Scheduled(cron = "0/5 * * * * ?")
+//    @Scheduled(cron = "0/5 * * * * ?")
     private void wipeStatus(){
         if (GlobalConfig.deviceStatus == null) return;
         List<String> suspectOffline = GlobalConfig.deviceStatus.entrySet().stream().filter(e -> !e.getValue()).map(Map.Entry::getKey).collect(Collectors.toList());
